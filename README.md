@@ -24,11 +24,12 @@ build.bat
 or manually:
 
 ```bat
-dotnet publish src\PdfReaderLight\PdfReaderLight.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o dist
+dotnet publish src\PdfReaderLight\PdfReaderLight.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o dist
 ```
 
-Output in `dist\`. Run `dist\PdfReaderLight.exe` (the target PC needs the
-[.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0)).
+Output in `dist\`: a single `PdfReaderLight.exe` (~5 MB, `pdfium.dll` embedded, no separate DLL).
+Run it on any Windows 10/11 x64 PC that has the
+[.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0).
 For a standalone exe that needs no runtime (~150 MB), use `--self-contained true`.
 
 ## Build & test from Linux/macOS
@@ -56,7 +57,7 @@ src/PdfReaderLight/   WinForms UI (Program, MainForm, RenderUtil, AppSettings)
 tests/CoreSmoke/      console test harness for the engine (exit code 0 = pass)
 testdata/             sample.pdf fixture + generator
 build.bat             one-click Windows build
-dist/                 publish output (gitignored)
+dist/                 publish output: single-file PdfReaderLight.exe (gitignored)
 ```
 
 ## How it works

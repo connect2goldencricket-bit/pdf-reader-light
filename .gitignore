@@ -6,3 +6,4 @@ dist/
 *.user
 *.suo
 __pycache__/
+dist*/

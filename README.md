@@ -13,6 +13,23 @@ The framework-dependent build is about **5 MB** (`PdfReaderLight.exe` ~0.3 MB + 
 - Remembers the last page per file and your zoom level (`%AppData%\PdfReaderLight\settings.json`)
 - Single-page view rendered on a background thread, so the UI never freezes on big pages
 
+## Installer (recommended — “normal app” setup)
+
+Prebuilt installer in [`releases/`](releases/PdfReaderLight-1.0.0-x64.msi):
+
+- **`releases/PdfReaderLight-1.0.0-x64.msi`** (~66 MB) — double-click to install. Installs to
+  `C:\Program Files\PdfReaderLight`, adds Start Menu + Desktop shortcuts, an entry in
+  Settings → Apps (with uninstall), and registers PdfReaderLight under .pdf “Open with”.
+  **Self-contained: no .NET runtime needed on the PC.**
+- **`releases/PdfReaderLight.exe`** (~74 MB) — the same app as a portable single-file exe
+  (self-contained, works without installing anything).
+
+Rebuild the installer yourself: `installer/build-installer.sh` (Linux/macOS, needs `msitools`)
+or `installer/build-installer.bat` (Windows, needs .NET 8 SDK + WiX v3).
+
+Note: the exe/MSI are unsigned, so Windows SmartScreen may show “Windows protected your PC”
+on first run — click **More info → Run anyway**.
+
 ## Build (on Windows)
 
 Requires the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
@@ -21,16 +38,14 @@ Requires the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
 build.bat
 ```
 
-or manually:
+or manually (framework-dependent, ~5 MB, needs the .NET 8 Desktop Runtime on the target PC):
 
 ```bat
 dotnet publish src\PdfReaderLight\PdfReaderLight.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o dist
 ```
 
-Output in `dist\`: a single `PdfReaderLight.exe` (~5 MB, `pdfium.dll` embedded, no separate DLL).
-Run it on any Windows 10/11 x64 PC that has the
-[.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0).
-For a standalone exe that needs no runtime (~150 MB), use `--self-contained true`.
+For a standalone exe that needs no runtime (~74 MB compressed), use
+`--self-contained true -p:EnableCompressionInSingleFile=true` (this is what the installer bundles).
 
 ## Build & test from Linux/macOS
 

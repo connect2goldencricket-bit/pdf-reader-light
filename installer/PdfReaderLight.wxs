@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- WiX v3 syntax: builds with wixl (msitools) on Linux/macOS, or candle+light (WiX v3) on Windows -->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="PdfReaderLight" Language="1033" Version="1.0.0.0"
+           Manufacturer="PdfReaderLight" UpgradeCode="{17a2a866-cd19-4337-ade3-6466dd0aee40}">
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine"
+             Description="Lightweight PDF reader for Windows"
+             Comments="Lightweight PDF reader for Windows (PDFium + WinForms). App code MIT, PDFium BSD-3." />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
+    <Icon Id="AppIcon.ico" SourceFile="installer/app.ico" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
+    <Property Id="ARPNOREPAIR" Value="yes" />
+    <Feature Id="Main" Level="1">
+      <ComponentRef Id="AppComponent" />
+    </Feature>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="INSTALLFOLDER" Name="PdfReaderLight">
+          <Component Id="AppComponent" Guid="*">
+            <File Id="AppExe" Source="dist-selfcontained/PdfReaderLight.exe" KeyPath="yes" />
+            <File Id="AppLicense" Source="dist-selfcontained/LICENSE" />
+            <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="PdfReaderLight"
+                      Icon="AppIcon.ico" Advertise="yes" WorkingDirectory="INSTALLFOLDER" />
+            <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="PdfReaderLight"
+                      Icon="AppIcon.ico" Advertise="yes" WorkingDirectory="INSTALLFOLDER" />
+            <RegistryValue Root="HKCR" Key="PdfReaderLightFile" Value="PDF Document" Type="string" />
+            <RegistryValue Root="HKCR" Key="PdfReaderLightFile\DefaultIcon" Value="[INSTALLFOLDER]PdfReaderLight.exe,0" Type="string" />
+            <RegistryValue Root="HKCR" Key="PdfReaderLightFile\shell\open\command" Value="&quot;[INSTALLFOLDER]PdfReaderLight.exe&quot; &quot;%1&quot;" Type="string" />
+            <RegistryValue Root="HKCR" Key=".pdf\OpenWithProgids" Name="PdfReaderLightFile" Value="" Type="string" />
+            <RegistryValue Root="HKCR" Key="Applications\PdfReaderLight.exe\shell\open\command" Value="&quot;[INSTALLFOLDER]PdfReaderLight.exe&quot; &quot;%1&quot;" Type="string" />
+            <RegistryValue Root="HKCR" Key="Applications\PdfReaderLight.exe\SupportedTypes" Name=".pdf" Value="" Type="string" />
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+  </Product>
+</Wix>
